@@ -27,17 +27,17 @@ namespace ScuffedWalls
             }
             return ConsoleColor.Red;
         }
-<<<<<<< Updated upstream
+
         public void PrintRainbow(string s)
         {
-            foreach(var letter in s)
+            foreach (var letter in s)
             {
                 Next();
                 Console.Write(letter);
             }
             Console.Write("\n");
             Console.ResetColor();
-=======
+        }
 
         public static ColorRGB NextColorGradient()
         {
@@ -278,8 +278,6 @@ namespace ScuffedWalls
             }
 
             h /= 6.0;
-
->>>>>>> Stashed changes
         }
     }
 

@@ -19,7 +19,6 @@ namespace ModChart.Wall
         {
             Settings = settings;
 
-<<<<<<< Updated upstream
             //performance time
             string fontname = new FileInfo(settings.ImagePath).Name;
             if (fonts == null || !fonts.Any(f => f.Name == fontname && f.size == settings.ImageSettings.scale))
@@ -30,9 +29,7 @@ namespace ModChart.Wall
 
             }
             letterCollection = fonts.Where(f => f.Name == fontname).First().Letters;
-            GenerateText();
-=======
-            letterCollection = LetterCollection.CreateLetters(new Bitmap(Settings.ImagePath), Settings.ImageSettings);
+
 
             if (settings.IsLyrics)
             {
@@ -42,9 +39,6 @@ namespace ModChart.Wall
                 
                 GenerateText();
             }
-
-            
->>>>>>> Stashed changes
         }
 
         void GenerateLyrics()

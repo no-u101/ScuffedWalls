@@ -9,7 +9,7 @@ namespace ScuffedWalls
 {
     public static class CustomDataParser
     {
-        public static BeatMap.CustomData CustomDataParse(this Parameter[] CustomNoodleData)
+        public static BeatMap.CustomData CustomDataParse(this Parameter[] CustomNoodleData, float animDuration = -1)
         {
             BeatMap.CustomData CustomData = new BeatMap.CustomData();
             BeatMap.CustomData.Animation Animation = new BeatMap.CustomData.Animation();
@@ -43,6 +43,68 @@ namespace ScuffedWalls
 
                 else if (param.Name == "AnimateInteractable".ToLower()) Animation._interactable = JsonSerializer.Deserialize<object>($"[{param.Data}]");
                 else if (param.Name == "DefineAnimateInteractable".ToLower()) Animation._interactable = param.Data;
+
+                else if (param.Name == "Transformation".ToLower())
+                {
+
+
+                    Transformation trans = Workspace.Transformations.First(t => t._name.ToString() == param.Data.removeWhiteSpace());
+
+                    Transformation newTrans = new Transformation();
+                    newTrans._data = new Transformation.Data();
+
+                    //ScuffedLogger.Log(trans._data._position.ToString());
+
+                    if (animDuration != -1)
+                    {
+                        if (!(trans._data._position is null))
+                        {
+                            object[][] pos = JsonSerializer.Deserialize<object[][]>(trans._data._position.ToString());
+
+
+
+                            for (int i = 0; i < pos.Length; i++)
+                            {
+                                pos[i][3] = float.Parse(pos[i][3].ToString()) * animDuration;
+                            }
+
+                            newTrans._data._position = pos;
+
+                            ScuffedLogger.Log(JsonSerializer.Serialize(newTrans._data._position));
+                        }
+
+                        if (!(trans._data._dissolve is null))
+                        {
+                            object[][] all = JsonSerializer.Deserialize<object[][]>(trans._data._dissolve.ToString());
+
+                            for (int i = 0; i < all.Length; i++)
+                            {
+                                all[i][1] = float.Parse(all[i][1].ToString()) * animDuration;
+                            }
+
+                            newTrans._data._dissolve = all;
+                        }
+
+                        if (!(trans._data._rotation is null))
+                        {
+                            object[][] all = JsonSerializer.Deserialize<object[][]>(trans._data._rotation.ToString());
+
+                            for (int i = 0; i < all.Length; i++)
+                            {
+                                all[i][3] = float.Parse(all[i][3].ToString()) * animDuration;
+                            }
+
+                            newTrans._data._rotation = all;
+                        }
+                    }
+                    else
+                    {
+                        newTrans = trans;
+                    }
+
+
+                    Animation = JsonSerializer.Deserialize<BeatMap.CustomData.Animation>(JsonSerializer.Serialize(newTrans._data));
+                }
 
                 else if (param.Name == "interactable".ToLower()) CustomData._interactable = JsonSerializer.Deserialize<object>(param.Data);
 
@@ -108,9 +170,6 @@ namespace ScuffedWalls
             return CustomData;
 
         }
-
-
-
 
         //adjust for lowercaseeaaa
         public static BeatMap.CustomData.CustomEvents.Data CustomEventsDataParse(this Parameter[] CustomNoodleData)
