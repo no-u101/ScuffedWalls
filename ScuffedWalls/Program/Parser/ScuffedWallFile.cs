@@ -18,6 +18,9 @@ namespace ScuffedWalls
         }
         public void Refresh()
         {
+            Workspace.Transformations.Clear();
+            Workspace.FontTemplates.Clear();
+
             //get all new lines from file
             List<string> lines = new List<string>();
             List<string> raw = new List<string>();
