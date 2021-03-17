@@ -17,6 +17,9 @@ namespace ScuffedWalls
         public List<BeatMap.CustomData.CustomEvents> CustomEvents { get; set; } = new List<BeatMap.CustomData.CustomEvents>();
         public List<BeatMap.CustomData.PointDefinition> PointDefinitions { get; set; } = new List<BeatMap.CustomData.PointDefinition>();
         public List<BeatMap.CustomData.Bookmark> Bookmarks { get; set; } = new List<BeatMap.CustomData.Bookmark>();
+        public static List<ModChart.Transformation> Transformations { get; set; } = new List<ModChart.Transformation>();
+
+        public static List<TextSettings> FontTemplates { get; set; } = new List<TextSettings>();
     }
     static class WorkspaceHelper
     {
