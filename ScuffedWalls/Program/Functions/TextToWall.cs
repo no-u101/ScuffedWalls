@@ -2,6 +2,7 @@
 using ModChart.Wall;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace ScuffedWalls.Functions
@@ -26,6 +27,11 @@ namespace ScuffedWalls.Functions
             string path = "";
             var customdata = Parameters.CustomDataParse();
             var isNjs = customdata != null && customdata._noteJumpStartBeatOffset != null;
+            float animDuration = 1;
+            float definite = 1;
+
+            TextSettings textSettings = null;
+
             foreach (var p in Parameters)
             {
                 switch (p.Name)
@@ -73,8 +79,9 @@ namespace ScuffedWalls.Functions
                         isblackempty = bool.Parse(p.Data);
                         break;
                     case "definiteduration":
+                        definite = p.Data.toFloat();
                         duration = Startup.bpmAdjuster.GetDefiniteDurationBeats(p.Data.toFloat());
-                        if (isNjs) Startup.bpmAdjuster.GetDefiniteDurationBeats(p.Data.toFloat(), customdata._noteJumpStartBeatOffset.toFloat());
+                        if (isNjs) duration = Startup.bpmAdjuster.GetDefiniteDurationBeats(p.Data.toFloat(), customdata._noteJumpStartBeatOffset.toFloat());
                         break;
                     case "definitetime":
                         if (p.Data.ToLower().removeWhiteSpace() == "beats")
@@ -92,9 +99,32 @@ namespace ScuffedWalls.Functions
                         duration = Startup.bpmAdjuster.GetDefiniteDurationBeats(Startup.bpmAdjuster.ToBeat(p.Data.toFloat()));
                         if (isNjs) duration = Startup.bpmAdjuster.GetDefiniteDurationBeats(Startup.bpmAdjuster.ToBeat(p.Data.toFloat()), customdata._noteJumpStartBeatOffset.toFloat());
                         break;
+                    case "fonttemplate":
+                        textSettings = Workspace.FontTemplates.First(f => f.Text[0] == p.Data);
+
+                        letting = textSettings.Letting;
+                        leading = textSettings.Leading;
+                        size = textSettings.ImageSettings.scale;
+                        thicc = textSettings.ImageSettings.thicc;
+                        compression = textSettings.ImageSettings.tolerance;
+                        shift = textSettings.ImageSettings.shift;
+                        linelength = textSettings.ImageSettings.maxPixelLength;
+                        isblackempty = textSettings.ImageSettings.isBlackEmpty;
+                        alpha = textSettings.ImageSettings.alfa;
+                        smooth = textSettings.ImageSettings.spread;
+                        path = textSettings.ImagePath;
+
+                        break;
+                    case "animduration":
+                        animDuration = p.Data.toFloat();
+                        break;
                 }
             }
             lines.Reverse();
+
+            ScuffedLogger.Log("Anim " + animDuration.ToString());
+            ScuffedLogger.Log("duration " +  duration.ToString());
+
             WallText text = new WallText(new TextSettings()
             {
                 Leading = leading,
@@ -116,7 +146,7 @@ namespace ScuffedWalls.Functions
                     {
                         _time = Time,
                         _duration = duration,
-                        _customData = Parameters.CustomDataParse()
+                        _customData = Parameters.CustomDataParse(animDuration/definite)
                     }
                 }
             });

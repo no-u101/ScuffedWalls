@@ -50,9 +50,16 @@ namespace ModChart.Wall
             //color override
             if (_Settings.Wall._customData._color != null) Pixels = Pixels.Select(p => { p.Color = Color.ColorFromObjArray(_Settings.Wall._customData._color); return p; }).ToArray();
 
+
+            //ScuffedWalls.ColorRGB color = ScuffedWalls.Rainbow.NextColorGradient();
+
             Random rnd = new Random();
             Walls = Pixels.Select(p =>
             {
+                
+
+                //ScuffedWalls.ScuffedLogger.Log($"{color.R} {color.G} {color.B}");
+
                 p = p.Transform(new Vector2() { X = (p.Scale.X / 2f) - (1f / _Settings.thicc * 2f), Y = 0 }); //thicc offseter
                 float spread = (Convert.ToSingle(rnd.Next(-100, 100)) / 100) * _Settings.spread;
                 return new BeatMap.Obstacle()

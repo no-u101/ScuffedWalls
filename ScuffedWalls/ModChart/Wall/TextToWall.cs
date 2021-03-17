@@ -19,6 +19,7 @@ namespace ModChart.Wall
         {
             Settings = settings;
 
+<<<<<<< Updated upstream
             //performance time
             string fontname = new FileInfo(settings.ImagePath).Name;
             if (fonts == null || !fonts.Any(f => f.Name == fontname && f.size == settings.ImageSettings.scale))
@@ -30,13 +31,92 @@ namespace ModChart.Wall
             }
             letterCollection = fonts.Where(f => f.Name == fontname).First().Letters;
             GenerateText();
+=======
+            letterCollection = LetterCollection.CreateLetters(new Bitmap(Settings.ImagePath), Settings.ImageSettings);
+
+            if (settings.IsLyrics)
+            {
+                GenerateLyrics();
+            } else
+            {
+                
+                GenerateText();
+            }
+
+            
+>>>>>>> Stashed changes
         }
-        void GenerateText()
+
+        void GenerateLyrics()
         {
             //Console.WriteLine(letterCollection.Length);
             List<BeatMap.Obstacle> walls = new List<BeatMap.Obstacle>();
             float scalefactor = Settings.ImageSettings.scale * 4f;
             float LineLayerPos = 0;
+
+            float LineIndexPos = 0;
+
+            float l_TotalTime = Settings.lyricsList[Settings.lyricsList.Count - 1].beat + Settings.lyricsList[Settings.lyricsList.Count - 1].animDuation;
+
+            for (int LyricsIndex = 0; LyricsIndex < Settings.lyricsList.Count; LyricsIndex++)
+            {
+                
+                for (int LineIndex = 0; LineIndex < Settings.lyricsList[LyricsIndex].text.Length; LineIndex++)
+                {
+                    alphabet letter = alphabet.nonchar;
+                    letter = (alphabet)Settings.lyricsList[LyricsIndex].text[LineIndex];
+
+                    if (letterCollection.Any(l => l.Character == letter))
+                    {
+                        var wallletter = letterCollection
+                            .Where(letr => letr.Character == letter)
+                            .First();
+
+
+                        BeatMap.Obstacle[] wallLetterWalls = wallletter.PlaceAt(new Vector2(LineIndexPos, LineLayerPos));
+                        foreach (BeatMap.Obstacle l_wall in wallLetterWalls)
+                        {
+                            l_wall.Append(new Parameter[]
+                            {
+                                new Parameter($"transformation: {Settings.animationList[LyricsIndex % Settings.animationList.Count]}")
+                            }.CustomDataParse(Settings.lyricsList[LyricsIndex].animDuation / (l_TotalTime - Settings.lyricsList[LyricsIndex].beat) ), AppendTechnique.Overwrites);
+                            l_wall._time = Startup.bpmAdjuster.GetPlaceTimeBeats(Settings.ImageSettings.Wall.GetTime() + Settings.lyricsList[LyricsIndex].beat);
+                            l_wall._duration = Startup.bpmAdjuster.GetDefiniteDurationBeats(l_TotalTime - Settings.lyricsList[LyricsIndex].beat);
+                        }
+                            
+
+                        walls.AddRange(wallLetterWalls);
+
+
+                        LineIndexPos += wallletter.Dimensions.X + (Settings.Letting * scalefactor); ;
+                    }
+                    else
+                    {
+                        LineIndexPos += Settings.Letting * scalefactor;
+                    }
+
+                }
+                //LineLayerPos += letterCollection.First().Dimensions.Y + (Settings.Leading * scalefactor);
+
+            }
+
+            //centeres the text
+            Walls = walls.ToArray().Transform_Pos(new Vector2(-walls.ToArray().GetDimensions().X / 2f, 0));
+
+        }
+    
+
+        void GenerateText()
+        {
+            
+
+            //Console.WriteLine(letterCollection.Length);
+            List<BeatMap.Obstacle> walls = new List<BeatMap.Obstacle>();
+            float scalefactor = Settings.ImageSettings.scale * 4f;
+            float LineLayerPos = 0;
+
+            
+
             for (int LineLayer = 0; LineLayer < Settings.Text.Length; LineLayer++)
             {
                 float LineIndexPos = 0;
@@ -51,8 +131,11 @@ namespace ModChart.Wall
                             .Where(letr => letr.Character == letter)
                             .First();
 
-                        walls.AddRange(wallletter.PlaceAt(new Vector2(LineIndexPos, LineLayerPos)));
-                        LineIndexPos += wallletter.Dimensions.X + (Settings.Letting * scalefactor);
+
+                        walls.AddRange( wallletter.PlaceAt(new Vector2(LineIndexPos, LineLayerPos)));
+
+
+                        LineIndexPos += wallletter.Dimensions.X + (Settings.Letting * scalefactor);;
                     }
                     else
                     {
@@ -162,7 +245,9 @@ namespace ModChart.Wall
         public float Letting { get; set; }
         public float Leading { get; set; }
         public ImageSettings ImageSettings { get; set; }
-
+        public List<ScuffedWalls.Functions.LyricsLineStruct> lyricsList { get; set; }
+        public List<string> animationList { get; set; }
+        public bool IsLyrics { get; set; } = false;
     }
     public static class TextHelper
     {

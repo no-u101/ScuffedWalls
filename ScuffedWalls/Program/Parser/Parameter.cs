@@ -67,9 +67,16 @@ namespace ScuffedWalls
             {
                 while (s.Contains("Random("))
                 {
+<<<<<<< Updated upstream
                     //Console.WriteLine("wow");
                     string[] asplit = s.Split("Random(", 2);
                     string[] randomparams = asplit[1].Split(',',2);
+=======
+
+
+                    string[] asplit = s.Split("random(", 2);
+                    string[] randomparams = asplit[1].Split(new char[] { ',', ')' });
+>>>>>>> Stashed changes
                     float first = randomparams[0].toFloat();
                     float last = randomparams[1].Split(")")[0].toFloat();
                     double random = rnd.NextDouble() * (last - first) + first;
