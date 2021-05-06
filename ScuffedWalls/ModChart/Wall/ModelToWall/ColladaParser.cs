@@ -289,14 +289,25 @@ namespace ModChart.Wall
             };
 
         }
+        public static Dictionary<string, object> cachedFileObjectDict = new Dictionary<string, object>();
+
         public static object DeserializeXML<t>(string path)
         {
             object obj = null;
-            XmlSerializer serializer = new XmlSerializer(typeof(t));
-            using (Stream reader = new FileStream(path, FileMode.Open))
+
+            if (!cachedFileObjectDict.TryGetValue(path, out obj))
             {
-                obj = serializer.Deserialize(reader);
+                XmlSerializer serializer = new XmlSerializer(typeof(t));
+
+
+                using (Stream reader = new FileStream(path, FileMode.Open))
+                {
+                    obj = serializer.Deserialize(reader);
+                    cachedFileObjectDict.Add(path, obj);
+                }
             }
+
+
             return obj;
         }
     }

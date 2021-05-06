@@ -66,6 +66,7 @@ namespace ScuffedWalls
 
                 //om nom nom
                 GC.Collect();
+                ModChart.Wall.Converters.cachedFileObjectDict = new System.Collections.Generic.Dictionary<string, object>();
 
                 //Warn the user
                 helper.Check(Parser.BeatMap);
