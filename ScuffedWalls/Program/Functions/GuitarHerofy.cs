@@ -17,7 +17,7 @@ namespace ScuffedWalls.Functions
     [ScuffedFunction("GuitarHerofy")]
     class GuitarHerofy : SFunction
     {
-        public void Run()
+        public override void Run()
         {
             float starttime = Time;
             float endtime = GetParam("tobeat", float.PositiveInfinity, p => float.Parse(p));
