@@ -59,6 +59,8 @@ namespace ScuffedWalls.Functions
             bool setdeltascale = GetParam("setdeltascale", false, p => bool.Parse(p));
             float duration = GetParam("duration", DefaultValue: 0, p => float.Parse(p));
 
+
+
             #region ConvertNotes
 
             int i = 0;
@@ -264,6 +266,7 @@ namespace ScuffedWalls.Functions
             #endregion
 
 
+
             #region AppendWalls
 
             if (onlyConvert)
@@ -284,6 +287,7 @@ namespace ScuffedWalls.Functions
             int walls = 0;
             int notes = 0;
             int customevents = 0;
+
             foreach (var note in InstanceWorkspace.Notes.OrderBy(o => o._time.toFloat()))
             {
                 if (note._time.toFloat() >= starttime && note._time.toFloat() <= endtime && (note._type.toFloat() == 1 || note._type.toFloat() == 0))
@@ -321,10 +325,11 @@ namespace ScuffedWalls.Functions
                         Delta.RotationEul = GetParam("deltarotation", DefaultValue: new Vector3(0, 0, 0), p => JsonSerializer.Deserialize<float[]>(p).ToVector3());
                         Delta.Scale = GetParam("deltascale", DefaultValue: new Vector3(1, 0, 0), p => new Vector3(float.Parse(p), 0, 0));
 
+
                         ModelSettings settings = new ModelSettings()
                         {
                             PCOptimizerPro = 0,
-                            Path =  paths[(int)note._type.toFloat() + modelType],
+                            Path = Utils.ScuffedConfig.MapFolderPath + @"\" + paths[(int)note._type.toFloat() + modelType],
                             Thicc = thicc,
                             CreateNotes = Notes,
                             DeltaTransformation = Delta,
@@ -353,19 +358,18 @@ namespace ScuffedWalls.Functions
                         var model = new WallModel(settings);
 
                         InstanceWorkspace.Walls.AddRange(model.Output._obstacles);
-                        InstanceWorkspace.Notes.AddRange(model.Output._notes);
-                        InstanceWorkspace.CustomEvents.AddRange(model.Output._customData._customEvents);
 
                         walls += model.Output._obstacles.Length;
                         notes += model.Output._notes.Length;
                         customevents += model.Output._customData._customEvents.Length;
-                        if (walls > 0) ConsoleOut("Wall", walls, Time, "GuitarHerofy");
-                        if (notes > 0) ConsoleOut("Note", notes, Time, "GuitarHerofy");
-                        if (customevents > 0) ConsoleOut("CustomEvent", customevents, Time, "GuitarHerofy");
                     }
                 }
 
             }
+
+            if (walls > 0) ConsoleOut("Wall", walls, Time, "GuitarHerofy");
+            if (notes > 0) ConsoleOut("Note", notes, Time, "GuitarHerofy");
+            if (customevents > 0) ConsoleOut("CustomEvent", customevents, Time, "GuitarHerofy");
 
             #endregion
         }
