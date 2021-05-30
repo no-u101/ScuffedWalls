@@ -9,9 +9,10 @@ namespace ScuffedWalls
 {
     class RPC
     {
-        static DiscordRpcClient client;
+        public static DiscordRpcClient client;
         public BeatMap currentMap { get; set; }
         public int workspace { get; set; }
+        public static bool ishidden { get; set; }
         public RPC()
         {
             if (client == null)
@@ -37,7 +38,7 @@ namespace ScuffedWalls
         }
         async Task autoUpdateRPC()
         {
-            while (currentMap == null) await Task.Delay(500);
+            while (currentMap == null || ishidden) await Task.Delay(500);
 
             client.UpdateDetails(Utils.Info["_songName"].ToString());
 
