@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using ModChart;
 
 namespace ScuffedWalls.Functions
@@ -17,8 +17,8 @@ namespace ScuffedWalls.Functions
                     {
                         ["color"] = GetParam("color", null, p => JsonSerializer.Deserialize<object[]>(p)),
                         ["shader"] = GetParam("shader", null, p => (object)p),
-                        ["track"] = GetParam("track", null, p => (object)p),
-                        ["shaderKeywords"] = GetParam("shaderKeywords", null, p => JsonSerializer.Deserialize<object[]>(p))
+                        ["track"] = GetParam("MaterialTrack", null, p => (object)p),
+                        //["shaderKeywords"] = GetParam("shaderKeywords", null, p => JsonSerializer.Deserialize<object[]>(p)) (disabled for now)
                     },
                     ["collision"] = GetParam("collision", null, p => (object)bool.Parse(p)),
                 },
