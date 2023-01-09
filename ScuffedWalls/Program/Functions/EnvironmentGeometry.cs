@@ -18,7 +18,6 @@ namespace ScuffedWalls.Functions
                         ["color"] = GetParam("color", null, p => JsonSerializer.Deserialize<object[]>(p)),
                         ["shader"] = GetParam("shader", null, p => (object)p),
                         ["track"] = GetParam("MaterialTrack", null, p => (object)p),
-                        //["shaderKeywords"] = GetParam("shaderKeywords", null, p => JsonSerializer.Deserialize<object[]>(p)) (disabled for now)
                     },
                     ["collision"] = GetParam("collision", null, p => (object)bool.Parse(p)),
                 },
