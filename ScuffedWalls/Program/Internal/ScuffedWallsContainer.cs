@@ -46,7 +46,7 @@ namespace ScuffedWalls
 
 # If the documentation is not sufficient
 # DM thelightdesigner#0832 or iswimfly#0556 for help (Discord)
-# Noodle Extension Community Discord https://discord.gg/ZDC3pG3xB8
+# Noodle Extension Community Discord https://discord.gg/BDMXFG7y3W
 
 Workspace
 ";
@@ -201,7 +201,8 @@ Workspace
             var latest = releases.OrderBy(r => r.PublishedAt).Last();
             if (latest.TagName != ScuffedWalls.Version)
             {
-                ScuffedWalls.Print($"Update Available! Latest Ver: {latest.Name} ({latest.HtmlUrl})", ScuffedWalls.LogSeverity.Notice, ShowStackFrame: false);
+                // ScuffedWalls.Print($"Update Available! Latest Ver: {latest.Name} ({latest.HtmlUrl})", ScuffedWalls.LogSeverity.Notice, ShowStackFrame: false);
+                // removed because i modified the version
             }
         }
         public static TreeDictionary GetInfo()
