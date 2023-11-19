@@ -201,8 +201,7 @@ Workspace
             var latest = releases.OrderBy(r => r.PublishedAt).Last();
             if (latest.TagName != ScuffedWalls.Version)
             {
-                // ScuffedWalls.Print($"Update Available! Latest Ver: {latest.Name} ({latest.HtmlUrl})", ScuffedWalls.LogSeverity.Notice, ShowStackFrame: false);
-                // removed because i modified the version
+                ScuffedWalls.Print($"Update Available! Latest Ver: {latest.Name} ({latest.HtmlUrl})", ScuffedWalls.LogSeverity.Notice, ShowStackFrame: false);
             }
         }
         public static TreeDictionary GetInfo()
